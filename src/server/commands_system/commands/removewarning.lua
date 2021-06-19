@@ -28,7 +28,7 @@ local function send_notification(admin, player, reason)
 		username = tostring(player).." Player Warning Removed!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Warning System**",
-		description = "A users warning has been removed!",
+		description = tostring(player).." warning has been removed!",
 		color = 0x0dcbff,
 	}
 	local notification_data = {
