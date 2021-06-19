@@ -91,16 +91,18 @@ remote_event.OnServerEvent:Connect(function(player, message)
     local command = table_find(Commander.commands, function(command) 
         return command.name == command_name
     end)
-    print(command_name, command)
 
-    command:execute({
-        player = player,
-        command_prefix = command_prefix,
-        command_name = command_name,
-        command_arguments = command_arguments,
-        combined_command_arguments = combined_command_arguments,
-    })
+	if not command then return end
 
+	print(command_name, command)
+	
+	command:execute({
+		player = player,
+		command_prefix = command_prefix,
+		command_name = command_name,
+		command_arguments = command_arguments,
+		combined_command_arguments = combined_command_arguments,
+	})
 end)
 
 return main

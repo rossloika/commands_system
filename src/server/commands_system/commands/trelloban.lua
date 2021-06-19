@@ -3,15 +3,15 @@ local commands_system = script.Parent.Parent
 local scripts_folder = commands_system.scripts
 local settings_module = require(commands_system.settings)
 local Command = require(scripts_folder.command)
-local trello_module = require(scripts_folder.trello_api)
+local trello_api = require(scripts_folder.trello_api)
 local send_game_notification = require(scripts_folder.send_notification)
 local send_webhook = require(scripts_folder.send_webhook)
 
 
 -- Trello Items
-local boardID = trello_module:GetBoardID("Adonis Control Center")
-local listID = trello_module:GetListID("Banlist",boardID)
-local listInfo = trello_module:GetCardsInList(listID)
+local boardID = trello_api:GetBoardID("Adonis Control Center")
+local listID = trello_api:GetListID("Banlist",boardID)
+local listInfo = trello_api:GetCardsInList(listID)
 
 -- Find player via a string
 local function find_player(player)
@@ -56,7 +56,7 @@ local function send_trello_ban(admin, player, banReason)
         userid = tostring(player.UserId),
         reason = banReason,
     }
-    trello_module:AddCard(banData.player..":"..banData.userid, "Administrator: "..banData.admin.."\nReason: "..banData.reason, listID)
+    trello_api:AddCard(banData.player..":"..banData.userid, "Administrator: "..banData.admin.."\nReason: "..banData.reason, listID)
 end
 
 return Command.new("trelloban", function(args)
