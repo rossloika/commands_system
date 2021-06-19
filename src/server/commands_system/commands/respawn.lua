@@ -21,7 +21,7 @@ local function send_notification(admin, player)
 		username = tostring(player).." Respawned!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Notifications System**",
-		description = "A user has been Respawned!",
+		description = tostring(player).." Has been Respawned!",
 		color = 0x0dcbff,
 	}
 	local notification_data = {

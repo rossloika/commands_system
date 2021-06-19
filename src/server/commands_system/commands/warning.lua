@@ -34,7 +34,7 @@ local function send_notification(admin, player, reason)
 		username = tostring(player).." Warned!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Warning System**",
-		description = "A user has been Warned!",
+		description = tostring(player).." Has been Warned!",
 		color = 0x0dcbff,
         fields = {
             {

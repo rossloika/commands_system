@@ -17,18 +17,18 @@ local function find_player(player)
 	end
 end
 
-local function send_notification(admin, player)
+local function send_notification(admin, player, banReason)
 	print(player.UserId)
 	local webhook_data = {
 		username = tostring(player).." Temporary Banned!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Temporary Ban System**",
-		description = "A user has been Temporary Banned!",
+		description = tostring(player).." Has been Temporary Banned!",
 		color = 0x0dcbff,
 		fields = {
 			{
 				name = "Reason",
-				value = tostring(player) or "no reason provided",
+				value = banReason,
 			},
 		}
 	}
@@ -50,10 +50,10 @@ local function send_temp_ban(admin, player, banReason)
         userid = tostring(player.UserId),
         reason = banReason,
     }
-    temporary_ban.ban_insert(banData)
+    temporary_ban.insert(banData)
 end
 
 return Command.new("ban", function(args)
 	send_temp_ban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-    send_notification(args.player, find_player(args.command_arguments[1]))
+    send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 end)

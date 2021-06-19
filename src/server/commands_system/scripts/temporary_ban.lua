@@ -1,21 +1,18 @@
-function main()
-
-end
-
+local ban = {}
 -- Temporary Ban List
 local bansList = {}
 
-function ban_insert(data)
+function ban.insert(data)
 	return table.insert(bansList, data.userid, data)
 end
 
-function ban_find(userid)
+function ban.find(userid)
 	return bansList[userid]
 end
 
-function ban_remove(userid)
+function ban.remove(userid)
 	bansList[userid] = nil
 	return true
 end
 
-return main
+return ban

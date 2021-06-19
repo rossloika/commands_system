@@ -15,18 +15,18 @@ local function find_player(player)
 	end
 end
 
-local function send_notification(admin, player)
+local function send_notification(admin, player, kickReason)
 	print(player.UserId)
 	local webhook_data = {
 		username = tostring(player).." Kicked!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Kick System**",
-		description = "A user has been kicked!",
+		description = tostring(player).." Has been kicked!",
 		color = 0x0dcbff,
 		fields = {
 			{
 				name = "Reason",
-				value = tostring(player) or "no reason provided",
+				value = kickReason,
 			},
 		}
 	}
@@ -46,10 +46,10 @@ return Command.new("kick", function(args)
 	if args.command_arguments[1] == "all" then
 		for _, players in ipairs(game.Players:GetChildren()) do
 			players:Kick(args.combined_command_arguments)
-			send_notification(args.player, find_player(args.command_arguments[1]), find_player(args.command_arguments[1]).UserId)
+			send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 		end
 	else
 		find_player(args.command_arguments[1]):Kick(args.combined_command_arguments)
-		send_notification(args.player, find_player(args.command_arguments[1]), find_player(args.command_arguments[1]).UserId)
+		send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 	end
 end)

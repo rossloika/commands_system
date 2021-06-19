@@ -28,7 +28,7 @@ local function send_notification(admin, player)
 		username = tostring(player).." Trello Banned!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Trello Ban System**",
-		description = "A user has been Trello Banned!",
+		description = tostring(player).." Has been Trello Banned!",
 		color = 0x0dcbff,
 		fields = {
 			{
