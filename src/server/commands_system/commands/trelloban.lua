@@ -22,7 +22,7 @@ local function find_player(player)
 	end
 end
 
-local function send_notification(admin, player)
+local function send_notification(admin, player, ban_reason)
 	print(player.UserId)
 	local webhook_data = {
 		username = tostring(player).." Trello Banned!",
@@ -33,7 +33,7 @@ local function send_notification(admin, player)
 		fields = {
 			{
 				name = "Reason",
-				value = tostring(player) or "no reason provided",
+				value = tostring(ban_reason),
 			},
 		}
 	}
@@ -49,17 +49,18 @@ local function send_notification(admin, player)
 	send_webhook.send("adminLogs", webhook_data)
 end
 
-local function send_trello_ban(admin, player, banReason)
+local function send_trello_ban(admin, player, ban_reason)
     local banData = {
         admin = tostring(admin),
         player = tostring(player),
         userid = tostring(player.UserId),
-        reason = banReason,
+        reason = ban_reason,
     }
     trello_api:AddCard(banData.player..":"..banData.userid, "Administrator: "..banData.admin.."\nReason: "..banData.reason, listID)
 end
 
 return Command.new("trelloban", function(args)
 	send_trello_ban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-    send_notification(args.player, find_player(args.command_arguments[1]))
+	find_player(args.command_arguments[1]):Kick(args.combined_command_arguments)
+    send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 end)

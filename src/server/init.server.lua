@@ -34,10 +34,10 @@ end
 
 local function playerAdded(player)
 	if temporary_ban.find(player.UserId) then
-		player:Kick("Temporary Banned")
+		player:Kick(settings_module.ban_message)
 	end
 	if check_trello_ban(player) then
-		player:Kick("Trello Banned")
+		player:Kick(settings_module.ban_message)
 	end
 end
 

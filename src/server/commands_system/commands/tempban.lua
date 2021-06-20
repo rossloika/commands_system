@@ -17,7 +17,7 @@ local function find_player(player)
 	end
 end
 
-local function send_notification(admin, player, banReason)
+local function send_notification(admin, player, ban_reason)
 	print(player.UserId)
 	local webhook_data = {
 		username = tostring(player).." Temporary Banned!",
@@ -28,7 +28,7 @@ local function send_notification(admin, player, banReason)
 		fields = {
 			{
 				name = "Reason",
-				value = banReason,
+				value = tostring(ban_reason),
 			},
 		}
 	}
@@ -44,16 +44,23 @@ local function send_notification(admin, player, banReason)
 	send_webhook.send("adminLogs", webhook_data)
 end
 
-local function send_temp_ban(admin, player, banReason)
+local function ban_reason_formatted(ban_reason)
+	if string.len(ban_reason) < 1 then
+		return "No reason provided."
+	end
+end
+
+local function send_temp_ban(admin, player, ban_reason)
     local banData = {
         player = tostring(player),
         userid = tostring(player.UserId),
-        reason = banReason,
+        reason = ban_reason,
     }
     temporary_ban.insert(banData)
+	player:Kick(banReason)
 end
 
 return Command.new("ban", function(args)
-	send_temp_ban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-    send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+	send_temp_ban(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
+    send_notification(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
 end)

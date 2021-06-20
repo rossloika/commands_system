@@ -25,12 +25,6 @@ local function send_notification(admin, player, banReason)
 		title = "**Temporary Ban System**",
 		description = tostring(player).." Has been Unbanned!",
 		color = 0x0dcbff,
-		fields = {
-			{
-				name = "Reason",
-				value = banReason,
-			},
-		}
 	}
 	local notification_data = {
 		player = admin,
@@ -44,11 +38,17 @@ local function send_notification(admin, player, banReason)
 	send_webhook.send("adminLogs", webhook_data)
 end
 
+local function ban_reason_formatted(ban_reason)
+	if string.len(ban_reason) < 1 then
+		return "No reason provided."
+	end
+end
+
 local function send_unban(admin, player, banReason)
     return temporary_ban.find(player.UserId)
 end
 
 return Command.new("unban", function(args)
-	send_unban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-    send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+	send_unban(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
+    send_notification(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
 end)

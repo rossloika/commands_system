@@ -6,4 +6,4 @@
 /*.rbxl.lock
 
 # Settings File
-/src.server.commands_system.settings.lua
+/src/server/commands_system/settings.lua
