@@ -14,13 +14,19 @@ local function find_player(player)
 		end
 	end
 end
-local function remove_warn_player(admin, player, number)
+local function remove_warn_player(admin, player, selected)
     local PlayerHead = player.Character:WaitForChild("Head")
     local warningsLocation = PlayerHead.OverHeadGui.Warnings
     local headInstances = PlayerHead.OverHeadGui.Warnings:GetChildren()
     local numberOfWarnings = #headInstances
-    local warningSelected = tostring("Warning "..number)
-    warningsLocation[warningSelected]:Destroy()
+    if selected == "all" then
+		for _, warning in pairs(headInstances) do
+			warning:Destroy()
+		end
+	else
+		local warningSelected = tostring("Warning "..selected)
+    	warningsLocation[warningSelected]:Destroy()
+	end
 end
 local function send_notification(admin, player, reason)
 	print(player.UserId)

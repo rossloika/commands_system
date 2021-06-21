@@ -1,4 +1,3 @@
--- FIX THIS ERROR FOR TEMP BAN!
 local commands_system = script.Parent.Parent
 local commands_system = script.Parent.Parent
 local scripts_folder = commands_system.scripts
