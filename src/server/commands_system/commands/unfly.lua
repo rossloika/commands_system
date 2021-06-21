@@ -21,16 +21,16 @@ end
 local function send_notification(admin, player)
 	print(player.UserId)
 	local webhook_data = {
-		username = tostring(player).." Unfly!",
+		username = player.Name .. " Unfly!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Notification System**",
-		description = tostring(player).." is not flying!",
+		description = player.Name .. " is not flying!",
 		color = 0x0dcbff,
 	}
 	local notification_data = {
 		player = admin,
 		title = "Unfly!",
-		text = tostring(player).." is not flying!",
+		text = player.Name .. " is not flying!",
 		icon = "rbxassetid://6537654035",
 		waitTime = 3
 	}
@@ -46,7 +46,11 @@ local function unfly(admin, player)
     player.Backpack:WaitForChild("flyScript"):Destroy()
 end
 
-return Command.new("unfly", function(args)
-	unfly(args.player, find_player(args.command_arguments[1]))
-    send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-end)
+return Command.new({
+	name = "unfly",
+	access_level = settings_module.access_level.supervisor,
+	executor = function(args)
+		unfly(args.player, find_player(args.command_arguments[1]))
+    	send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+	end,
+})

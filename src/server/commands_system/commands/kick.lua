@@ -18,10 +18,10 @@ end
 local function send_notification(admin, player, kickReason)
 	print(player.UserId)
 	local webhook_data = {
-		username = tostring(player).." Kicked!",
+		username = player.Name .. " Kicked!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Kick System**",
-		description = tostring(player).." Has been kicked!",
+		description = player.Name .. " Has been kicked!",
 		color = 0x0dcbff,
 		fields = {
 			{
@@ -33,7 +33,7 @@ local function send_notification(admin, player, kickReason)
 	local notification_data = {
 		player = admin,
 		title = "Kicked!",
-		text = tostring(player).." Has been kicked!",
+		text = player.Name .. " Has been kicked!",
 		icon = "rbxassetid://6537654035",
 		waitTime = 3
 	}
@@ -42,14 +42,18 @@ local function send_notification(admin, player, kickReason)
 	send_webhook.send("adminLogs", webhook_data)
 end
 
-return Command.new("kick", function(args)
-	if args.command_arguments[1] == "all" then
-		for _, players in ipairs(game.Players:GetChildren()) do
-			players:Kick(args.combined_command_arguments)
+return Command.new({
+	name = "kick",
+	access_level = settings_module.access_level.moderator,
+	executor = function(args)
+		if args.command_arguments[1] == "all" then
+			for _, players in ipairs(game.Players:GetChildren()) do
+				players:Kick(args.combined_command_arguments)
+				send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+			end
+		else
+			find_player(args.command_arguments[1]):Kick(args.combined_command_arguments)
 			send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 		end
-	else
-		find_player(args.command_arguments[1]):Kick(args.combined_command_arguments)
-		send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-	end
-end)
+	end,
+})

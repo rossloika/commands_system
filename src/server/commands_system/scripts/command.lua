@@ -1,10 +1,11 @@
 local Command = {}
 Command.__index = Command
 
-Command.new = function(name, executor)
+Command.new = function(opts)
 	local self = {
-        name = name,
-        executor = executor,
+        name = opts.name,
+		access_level = opts.access_level,
+        executor = opts.executor,
 	}
 	return setmetatable(self, Command)
 end

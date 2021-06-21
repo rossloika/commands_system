@@ -23,7 +23,7 @@ local function send_notification(admin, player, result)
         local notification_data = {
             player = admin,
             title = "Temporary Ban!",
-            text = tostring(player).." Has a Temporary Ban!",
+            text = player.Name .. " Has a Temporary Ban!",
             icon = "rbxassetid://6537654035",
             waitTime = 3
         }
@@ -32,7 +32,7 @@ local function send_notification(admin, player, result)
         local notification_data = {
             player = admin,
             title = "Temporary Ban!",
-            text = tostring(player).." Does not have Temporary Ban!",
+            text = player.Name .. " Does not have Temporary Ban!",
             icon = "rbxassetid://6537654035",
             waitTime = 3
         }
@@ -44,10 +44,14 @@ local function check_temp_ban(admin, player, banReason)
     return temporary_ban.find(player.UserId)
 end
 
-return Command.new("checkban", function(args)
-	if check_temp_ban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments) then
-        send_notification(args.player, find_player(args.command_arguments[1]), true)
-    else
-        send_notification(args.player, find_player(args.command_arguments[1]), false)
-    end
-end)
+return Command.new({
+	name = "checkban",
+	access_level = settings_module.access_level.moderator,
+	executor = function(args)
+        if check_temp_ban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments) then
+            send_notification(args.player, find_player(args.command_arguments[1]), true)
+        else
+            send_notification(args.player, find_player(args.command_arguments[1]), false)
+        end
+    end,
+})

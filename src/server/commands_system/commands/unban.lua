@@ -20,16 +20,16 @@ end
 local function send_notification(admin, player, banReason)
 	print(player.UserId)
 	local webhook_data = {
-		username = tostring(player).." Unbanned!",
+		username = player.Name .. " Unbanned!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Temporary Ban System**",
-		description = tostring(player).." Has been Unbanned!",
+		description = player.Name .. " Has been Unbanned!",
 		color = 0x0dcbff,
 	}
 	local notification_data = {
 		player = admin,
 		title = "Unbanned!",
-		text = tostring(player).." Has been Unbanned!",
+		text = player.Name .. " Has been Unbanned!",
 		icon = "rbxassetid://6537654035",
 		waitTime = 3
 	}
@@ -48,7 +48,11 @@ local function send_unban(admin, player, banReason)
     return temporary_ban.find(player.UserId)
 end
 
-return Command.new("unban", function(args)
-	send_unban(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
-    send_notification(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
-end)
+return Command.new({
+	name = "unban",
+	access_level = settings_module.access_level.administrator,
+	executor = function(args)
+		send_unban(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
+    	send_notification(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
+	end,
+})

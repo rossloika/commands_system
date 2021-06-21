@@ -17,17 +17,23 @@ settings_module.access_levels = {
 	leader = 4,
 }
 
-settings_module.groups = {
-	{
-		group_id = 0000,
-		rank_id = 0,
-		permissions_level = settings_module.access_levels.moderator,
+settings_module.users_access_levels = {
+	groups = {
+		{
+			group_id = 0,
+			ranks = {
+				{
+					rank_id = 0,
+					access_level = settings_module.access_level.moderator,
+				},
+			},
+		},
 	},
-}
-settings_module.admins = {
-	{
-		user_id = 39509691, -- Ross
-		permissions_level = settings_module.access_levels.leader,
+	users = {
+		{
+			player_id = 0,
+			access_level = settings_module.access_level.moderator,
+		},
 	},
 }
 

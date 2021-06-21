@@ -25,10 +25,10 @@ end
 local function send_notification(admin, player, ban_reason)
 	print(player.UserId)
 	local webhook_data = {
-		username = tostring(player).." Trello Banned!",
+		username = player.Name .. " Trello Banned!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Trello Ban System**",
-		description = tostring(player).." Has been Trello Banned!",
+		description = player.Name .. " Has been Trello Banned!",
 		color = 0x0dcbff,
 		fields = {
 			{
@@ -40,7 +40,7 @@ local function send_notification(admin, player, ban_reason)
 	local notification_data = {
 		player = admin,
 		title = "Trello Banned!",
-		text = tostring(player).." Has been Trello Banned!",
+		text = player.Name .. " Has been Trello Banned!",
 		icon = "rbxassetid://6537654035",
 		waitTime = 3
 	}
@@ -59,8 +59,12 @@ local function send_trello_ban(admin, player, ban_reason)
     trello_api:AddCard(banData.player..":"..banData.userid, "Administrator: "..banData.admin.."\nReason: "..banData.reason, listID)
 end
 
-return Command.new("trelloban", function(args)
-	send_trello_ban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-	find_player(args.command_arguments[1]):Kick(args.combined_command_arguments)
-    send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-end)
+return Command.new({
+	name = "trelloban",
+	access_level = settings_module.access_level.moderator,
+	executor = function(args)
+		send_trello_ban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+		find_player(args.command_arguments[1]):Kick(args.combined_command_arguments)
+    	send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+	end,
+})

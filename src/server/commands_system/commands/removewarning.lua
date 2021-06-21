@@ -31,16 +31,16 @@ end
 local function send_notification(admin, player, reason)
 	print(player.UserId)
 	local webhook_data = {
-		username = tostring(player).." Player Warning Removed!",
+		username = player.Name .. " Player Warning Removed!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Warning System**",
-		description = tostring(player).." warning has been removed!",
+		description = player.Name .. " warning has been removed!",
 		color = 0x0dcbff,
 	}
 	local notification_data = {
 		player = admin,
 		title = "Player Warning Removed!",
-		text = tostring(player).." warning has been removed!",
+		text = player.Name .. " warning has been removed!",
 		icon = "rbxassetid://6537654035",
 		waitTime = 3
 	}
@@ -49,43 +49,11 @@ local function send_notification(admin, player, reason)
 	send_webhook.send("adminLogs", webhook_data)
 end
 
-return Command.new("removewarn", function(args)
-    remove_warn_player(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-	send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-end)
-
---[[
-		if numberOfWarnings >= 3 then
-			local warningsList = {}	
-
-			for index, warnings in ipairs(warningsLocation:GetChildren()) do
-				if warnings:IsA("TextBox") then
-					table.insert(warningsList, index, warnings.Text)
-				end
-			end
-
-			local warningLogData = {
-				username = tostring(foundPlayer).." Kicked!",
-				avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", foundPlayer.UserId),
-				title = "**Warning System**",
-				description = "A user has been kicked for **three** warnings!",
-				color = 0x0dcbff,
-				fields = {
-					{
-						name = "Warning One",
-						value = tostring(warningsList[2]) or "no reason specified",
-					},
-					{
-						name = "Warning Two",
-						value = tostring(warningsList[3]) or "no reason specified",
-					},
-					{
-						name = "Warning Three",
-						value = tostring(warningsList[4]) or "no reason specified",
-					},
-				}
-			}
-			webhookModule.send("warningLogs", warningLogData)
-			foundPlayer:Kick("\nYou have exceeded the maximum limit for having warnings.")
-		end
---]]
+return Command.new({
+	name = "removewarn",
+	access_level = settings_module.access_level.administrator,
+	executor = function(args)
+		remove_warn_player(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+		send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+	end,
+})

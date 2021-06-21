@@ -21,10 +21,10 @@ end
 local function send_notification(admin, player, message)
 	print(player.UserId)
 	local webhook_data = {
-		username = tostring(player).." Flying!",
+		username = player.Name .. " Flying!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Notification System**",
-		description = tostring(player).." is flying!",
+		description = player.Name .. " is flying!",
 		color = 0x0dcbff,
 	}
 
@@ -33,7 +33,7 @@ local function send_notification(admin, player, message)
     if message then 
         checked_message = message 
     else 
-        checked_message = tostring(player).." Is already flying!" 
+        checked_message = player.Name .. " Is already flying!" 
     end
 
 	local notification_data = {
@@ -59,7 +59,11 @@ local function create_fly_script(admin, player)
     end
 end
 
-return Command.new("fly", function(args)
-	create_fly_script(args.player, find_player(args.command_arguments[1]))
-    send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-end)
+return Command.new({
+	name = "fly",
+	access_level = settings_module.access_level.supervisor,
+	executor = function(args)
+		create_fly_script(args.player, find_player(args.command_arguments[1]))
+		send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+	end,
+})

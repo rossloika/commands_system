@@ -30,7 +30,7 @@ local function warn_player(admin, player, reason)
 		end
 
 		local webhook_data = {
-			username = tostring(player).." Kicked!",
+			username = player.Name .. " Kicked!",
 			avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 			title = "**Warning System**",
 			description = "A user has been kicked for **three** warnings!",
@@ -66,16 +66,16 @@ local function warn_player(admin, player, reason)
 		local cloneWarning = misc_folder.WarningExample:Clone()
 
         cloneWarning.Text = string.format("WARNING %s | %s ", numberOfWarnings, reason)
-        cloneWarning.Name = "Warning "..numberOfWarnings
+        cloneWarning.Name = "Warning " .. numberOfWarnings
         cloneWarning.Parent = warningsLocation
     end
 end
 local function send_notification(admin, player, reason)
 	local webhook_data = {
-		username = tostring(player).." Warned!",
+		username = player.Name .. " Warned!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
 		title = "**Warning System**",
-		description = tostring(player).." Has been Warned!",
+		description = player.Name .. " Has been Warned!",
 		color = 0x0dcbff,
         fields = {
             {
@@ -87,7 +87,7 @@ local function send_notification(admin, player, reason)
 	local notification_data = {
 		player = admin,
 		title = "Player Warned!",
-		text = tostring(player).." Has been Warned!",
+		text = player.Name .. " Has been Warned!",
 		icon = "rbxassetid://6537654035",
 		waitTime = 3
 	}
@@ -96,7 +96,11 @@ local function send_notification(admin, player, reason)
 	send_webhook.send("adminLogs", webhook_data)
 end
 
-return Command.new("warn", function(args)
-    warn_player(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-	send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-end)
+return Command.new({
+	name = "warn",
+	access_level = settings_module.access_level.moderator,
+	executor = function(args)
+		warn_player(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+		send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+	end,
+})
