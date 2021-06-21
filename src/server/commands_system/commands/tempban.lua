@@ -50,13 +50,13 @@ local function ban_reason_formatted(ban_reason)
 end
 
 local function send_temp_ban(admin, player, ban_reason)
-    local banData = {
+    local ban_data = {
         player = tostring(player),
         userid = tostring(player.UserId),
         reason = ban_reason,
     }
-    temporary_ban.insert(banData)
-	player:Kick(banReason)
+    temporary_ban.insert(ban_data)
+	player:Kick(ban_reason)
 end
 
 return Command.new("ban", function(args)

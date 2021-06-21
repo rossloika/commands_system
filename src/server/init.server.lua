@@ -2,6 +2,9 @@ require(script.commands_system.scripts.startup)
 
 local Players = game:GetService("Players")
 
+local DataStoreService = game:GetService("DataStoreService")
+local temporary_ban_ds = DataStoreService:GetDataStore("temporary_ban_datastore")
+
 local commands_system = script.commands_system
 local commands_folder = commands_system.commands
 local scripts_folder = commands_system.scripts
@@ -33,6 +36,23 @@ local function check_trello_ban(player)
 end
 
 local function playerAdded(player)
+	local success, result = pcall(function()
+		return temporary_ban_ds:GetAsync(tostring(player.UserId), "temporary_ban_datastore")
+	end)
+	warn(success, result, os.time())
+	if success then
+		if result then
+			if result.BanTime < os.time() then
+				temporary_ban_ds:RemoveAsync(tostring(player.UserId))
+				warn("Data removed")
+			else
+				warn(os.time())
+				player:Kick("You are currently Time-Banned. Please try again later.")
+			end
+		else
+			print("No data")
+		end
+	end
 	if temporary_ban.find(player.UserId) then
 		player:Kick(settings_module.ban_message)
 	end

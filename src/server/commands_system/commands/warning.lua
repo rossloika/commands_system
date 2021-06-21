@@ -1,6 +1,7 @@
 local commands_system = script.Parent.Parent
 local scripts_folder = commands_system.scripts
 local misc_folder = commands_system.misc
+local temporary_ban = require(scripts_folder.temporary_ban)
 local settings_module = require(commands_system.settings)
 local Command = require(scripts_folder.command)
 local send_game_notification = require(scripts_folder.send_notification)
@@ -19,8 +20,49 @@ local function warn_player(admin, player, reason)
     local warningsLocation = PlayerHead.OverHeadGui.Warnings
     local headInstances = PlayerHead.OverHeadGui.Warnings:GetChildren()
     local numberOfWarnings = #headInstances
+	if numberOfWarnings >= 3 then
+		local warningsList = {}	
 
-    if reason ~= "" then
+		for index, warnings in ipairs(warningsLocation:GetChildren()) do
+			if warnings:IsA("TextBox") then
+				table.insert(warningsList, index, warnings.Text)
+			end
+		end
+
+		local webhook_data = {
+			username = tostring(player).." Kicked!",
+			avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
+			title = "**Warning System**",
+			description = "A user has been kicked for **three** warnings!",
+			color = 0x0dcbff,
+			fields = {
+				{
+					name = "Warning One",
+					value = tostring(warningsList[2]) or "nil",
+				},
+				{
+					name = "Warning Two",
+					value = tostring(warningsList[3]) or "nil",
+				},
+				{
+					name = "Warning Three",
+					value = tostring(warningsList[4]) or "nil",
+				},
+			}
+		}
+		local ban_data = {
+			player = tostring(player),
+			userid = tostring(player.UserId),
+			reason = reason,
+			time = 60 -- In seconds 600 seconds in 10 minutes
+		}
+
+		send_webhook.send("adminLogs", webhook_data)
+		temporary_ban.time_ban_create(ban_data)
+		player:Kick("\nYou have exceeded the maximum limit for having warnings.\nYou have been timed banned for 10 minutes.")
+		
+	end
+	if reason ~= "" then
 		local cloneWarning = misc_folder.WarningExample:Clone()
 
         cloneWarning.Text = string.format("WARNING %s | %s ", numberOfWarnings, reason)
@@ -29,7 +71,6 @@ local function warn_player(admin, player, reason)
     end
 end
 local function send_notification(admin, player, reason)
-	print(player.UserId)
 	local webhook_data = {
 		username = tostring(player).." Warned!",
 		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
