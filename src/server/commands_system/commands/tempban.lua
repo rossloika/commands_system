@@ -50,10 +50,13 @@ local function ban_reason_formatted(ban_reason)
 end
 
 local function send_temp_ban(admin, player, ban_reason)
+	local date = os.date("!*t")
     local ban_data = {
         player = tostring(player),
         userid = tostring(player.UserId),
         reason = ban_reason,
+		time = string.format("Date: %s / %s / %s", date.month, date.day, date.year),
+
     }
     temporary_ban.insert(ban_data)
 	player:Kick(ban_reason)

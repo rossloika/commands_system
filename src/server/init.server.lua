@@ -59,6 +59,12 @@ local function playerAdded(player)
 	if check_trello_ban(player) then
 		player:Kick(settings_module.ban_message)
 	end
+
+	---
+
+	local new_ui = Instance.new("ScreenGui")
+	new_ui.Parent = player.PlayerGui
+	new_ui.Name = "CustomAdminGui"
 end
 
 for _, player in ipairs(Players:GetPlayers()) do
