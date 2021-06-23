@@ -9,6 +9,7 @@ local temporary_ban = require(scripts_folder.temporary_ban)
 local send_game_notification = require(scripts_folder.send_notification)
 local send_webhook = require(scripts_folder.send_webhook)
 local create_ui = require(scripts_folder.create_ui)
+local admin_logs = require(scripts_folder.admin_logs)
 
 -- Find player via a string
 local function find_player(player)
@@ -28,7 +29,7 @@ local function send_notification(admin)
 		color = 0x0dcbff,
 	}
 	local notification_data = {
-		admin = admin,
+		player = admin,
 		title = "Admin Logs!",
 		text = admin.Name .. " created admin logs!",
 		icon = "rbxassetid://6537654035",
@@ -43,11 +44,23 @@ local function create_admin_log(admin)
     create_ui.create_admin_logs(admin)
 end
 
+local function display_admin_logs(admin)
+	local admin_log_template = misc_folder.ui_frames.log_template
+
+	for _, log in pairs(admin_logs.logs) do
+		local cloned_admin_log_template = admin_log_template:Clone()
+		cloned_admin_log_template.Parent = admin.PlayerGui:WaitForChild("CustomAdminGui", 5).admin_logs.logs
+		cloned_admin_log_template.Text = string.format("%s: %s %s %s", log.time, log.admin.Name, log.command_name, log.reason)
+	end
+end
+
 return Command.new({
 	name = "adminlogs",
 	access_level = settings_module.access_level.supervisor,
 	executor = function(args)
 		create_admin_log(args.player)
+		display_admin_logs(args.player)
 		send_notification(args.player)
+		warn(admin_logs.logs)
 	end,
 })

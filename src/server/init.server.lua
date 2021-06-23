@@ -72,3 +72,9 @@ for _, player in ipairs(Players:GetPlayers()) do
 end
 
 Players.PlayerAdded:Connect(playerAdded)
+
+remote_event.OnServerEvent:Connect(function(player, type)
+	if type == "refresh_admin_logs_ui" then
+		
+	end
+end)

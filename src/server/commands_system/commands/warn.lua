@@ -1,11 +1,14 @@
 local commands_system = script.Parent.Parent
+
 local scripts_folder = commands_system.scripts
 local misc_folder = commands_system.misc
+
 local temporary_ban = require(scripts_folder.temporary_ban)
 local settings_module = require(commands_system.settings)
 local Command = require(scripts_folder.command)
 local send_game_notification = require(scripts_folder.send_notification)
 local send_webhook = require(scripts_folder.send_webhook)
+local admin_logs = require(scripts_folder.admin_logs)
 
 -- Find player via a string
 local function find_player(player)
@@ -70,6 +73,7 @@ local function warn_player(admin, player, reason)
         cloneWarning.Parent = warningsLocation
     end
 end
+
 local function send_notification(admin, player, reason)
 	local webhook_data = {
 		username = player.Name .. " Warned!",
@@ -101,6 +105,7 @@ return Command.new({
 	access_level = settings_module.access_level.moderator,
 	executor = function(args)
 		warn_player(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+		admin_logs.create_admin_log(args.player, find_player(args.command_arguments[1]), args.command_name, args.combined_command_arguments)
 		send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 	end,
 })
