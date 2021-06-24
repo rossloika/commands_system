@@ -25,7 +25,8 @@ function webhook.send(webhookName, data)
 						["text"] = string.format("Date: %s / %s / %s", date.month, date.day, date.year)
 					}
 				}
-			}
+			},
+			["components"] = data.components
 		}
 	))
 end

@@ -75,19 +75,40 @@ local function warn_player(admin, player, reason)
 end
 
 local function send_notification(admin, player, reason)
-	local webhook_data = {
-		username = player.Name .. " Warned!",
-		avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
-		title = "**Warning System**",
-		description = player.Name .. " Has been Warned!",
-		color = 0x0dcbff,
-        fields = {
-            {
-                name = "Reason",
-                value = reason,
-            },
-        },
+		local webhook_data = {
+			username = player.Name .. " Warned!",
+			avatarUrl = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
+			title = "**Warning System**",
+			description = player.Name .. " Has been Warned!",
+			color = 0x0dcbff,
+			fields = {
+				{
+					name = "Reason",
+					value = reason,
+				},
+			},
+			components = {
+			{
+				type = 1,
+				components = {
+					{
+						type = 2,
+						style = 5,
+						disabled = false,
+						label = "Admin Player Profile",
+						url = string.format("https://roblox.com/profile/%s", admin.UserId),
+					},{
+						type = 2,
+						style = 5,
+						disabled = false,
+						label = "Warned Player Profile",
+						url = string.format("https://roblox.com/profile/%s", player.UserId),
+					},
+				},
+			},
+		}
 	}
+
 	local notification_data = {
 		player = admin,
 		title = "Player Warned!",
