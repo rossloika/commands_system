@@ -58,7 +58,7 @@ return Command.new({
 				{
 					admin = args.player,
 					player = find_player(args.command_arguments[1]),
-					reason = args.combined_command_arguments,
+					command_combined_arguments = args.combined_command_arguments,
 					command_name = args.command_name,
 				}
 			)

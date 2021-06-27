@@ -9,7 +9,7 @@ function admin_logs.create_admin_log(data)
 		admin = data.admin,
 		player = data.player,
 		command_name = data.command_name,
-		reason = data.reason or "No Reason Provided",
+		command_combined_arguments = data.command_combined_arguments or "No Reason Provided",
 		time = time,
 	}
 
