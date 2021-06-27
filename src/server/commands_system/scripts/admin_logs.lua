@@ -2,15 +2,15 @@ local admin_logs = {}
 
 admin_logs.logs = {}
 
-function admin_logs.create_admin_log(admin, player, command_name, reason)
-    local date = os.date("!*t")
+function admin_logs.create_admin_log(data)
+	local time = os.date("%X")
 	
 	local data = {
-		admin = admin,
-		player = player,
-		command_name = command_name,
-		reason = reason,
-		time = string.format("%s/%s/%s", date.month, date.day, date.year),
+		admin = data.admin,
+		player = data.player,
+		command_name = data.command_name,
+		reason = data.reason or "No Reason Provided",
+		time = time,
 	}
 
 	admin_logs.append(data)

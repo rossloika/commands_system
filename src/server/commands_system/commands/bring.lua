@@ -5,6 +5,7 @@ local settings_module = require(commands_system.settings)
 local Command = require(scripts_folder.command)
 local send_game_notification = require(scripts_folder.send_notification)
 local send_webhook = require(scripts_folder.send_webhook)
+local admin_logs = require(scripts_folder.admin_logs)
 
 -- Find player via a string
 local function find_player(player)
@@ -43,6 +44,13 @@ return Command.new({
         local findPlayer = find_player(args.command_arguments[1])
     	local findPlayerCharacter = findPlayer.Character
     	findPlayerCharacter:SetPrimaryPartCFrame(CFrame.new(Vector3.new(findPlayerCharacter.HumanoidRootPart.Position.X + 3, findPlayerCharacter.HumanoidRootPart.Position.Y, findPlayerCharacter.HumanoidRootPart.Position.Z)))
-   	 	send_notification(args.player, find_player(args.command_arguments[1]))
+		admin_logs.create_admin_log(
+			{
+				admin = args.player,
+				player = find_player(args.command_arguments[1]),
+				command_name = args.command_name,
+			}
+		)
+		send_notification(args.player, find_player(args.command_arguments[1]))
     end,
 })

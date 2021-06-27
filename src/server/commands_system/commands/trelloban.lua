@@ -6,6 +6,7 @@ local Command = require(scripts_folder.command)
 local trello_api = require(scripts_folder.trello_api)
 local send_game_notification = require(scripts_folder.send_notification)
 local send_webhook = require(scripts_folder.send_webhook)
+local admin_logs = require(scripts_folder.admin_logs)
 
 
 -- Trello Items
@@ -65,6 +66,14 @@ return Command.new({
 	executor = function(args)
 		send_trello_ban(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 		find_player(args.command_arguments[1]):Kick(args.combined_command_arguments)
+		admin_logs.create_admin_log(
+			{
+				admin = args.player,
+				player = find_player(args.command_arguments[1]),
+				reason = args.combined_command_arguments,
+				command_name = args.command_name,
+			}
+		)
     	send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 	end,
 })

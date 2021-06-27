@@ -61,6 +61,12 @@ return Command.new({
 		create_admin_log(args.player)
 		display_admin_logs(args.player)
 		send_notification(args.player)
+		admin_logs.create_admin_log(
+		{
+			admin = args.player,
+			command_name = args.command_name,
+		}
+	)
 		warn(admin_logs.logs)
 	end,
 })

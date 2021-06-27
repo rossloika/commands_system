@@ -7,6 +7,7 @@ local Command = require(scripts_folder.command)
 local temporary_ban = require(scripts_folder.temporary_ban)
 local send_game_notification = require(scripts_folder.send_notification)
 local send_webhook = require(scripts_folder.send_webhook)
+local admin_logs = require(scripts_folder.admin_logs)
 
 -- Find player via a string
 local function find_player(player)
@@ -53,6 +54,13 @@ return Command.new({
 	access_level = settings_module.access_level.administrator,
 	executor = function(args)
 		send_unban(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
+		admin_logs.create_admin_log(
+			{
+				admin = args.player,
+				player = find_player(args.command_arguments[1]),
+				command_name = args.command_name,
+			}
+	)
     	send_notification(args.player, find_player(args.command_arguments[1]), ban_reason_formatted(args.combined_command_arguments))
 	end,
 })

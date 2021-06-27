@@ -22,7 +22,7 @@ function webhook.send(webhookName, data)
 					["color"] = data.color,
 					["fields"] = data.fields,
 					["footer"] = {
-						["text"] = string.format("Date: %s / %s / %s", date.month, date.day, date.year)
+						["text"] = string.format("Date: %s/%s/%s", date.month, date.day, date.year)
 					}
 				}
 			},

@@ -126,7 +126,14 @@ return Command.new({
 	access_level = settings_module.access_level.moderator,
 	executor = function(args)
 		warn_player(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
-		admin_logs.create_admin_log(args.player, find_player(args.command_arguments[1]), args.command_name, args.combined_command_arguments)
+		admin_logs.create_admin_log(
+			{
+				admin = args.player,
+				player = find_player(args.command_arguments[1]),
+				reason = args.combined_command_arguments,
+				command_name = args.command_name,
+			}
+		)
 		send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
 	end,
 })
