@@ -12,7 +12,8 @@ local misc_folder = commands_system.misc
 local command = require(scripts_folder.command)
 local Commander = require(scripts_folder.commander)
 local settings_module = require(commands_system.settings)
-local send_game_notification = require(scripts_folder.send_notification)
+local game_notification = require(scripts_folder.send_notification)
+local find_player = require(scripts_folder.find_player)
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local commands_system_shared = ReplicatedStorage.Common.commands_system_shared
@@ -37,15 +38,6 @@ local remote_event = commands_system_shared.RemoteEvent
 -- 		},
 -- 	},
 -- }
-
--- Find player via a string
-local function find_player(player)
-	for _, players in ipairs(game.Players:GetPlayers()) do
-		if player:lower() == players.Name:lower():sub(1, #player:lower()) then 
-			return game.Players:FindFirstChild(tostring(players))
-		end
-	end
-end
 
 --- @returns { access_level | nil }
 local function get_user_access_level_by_user_in_users(player_id)
@@ -145,7 +137,7 @@ remote_event.OnServerEvent:Connect(function(player, message)
 	local user_access_level = get_user_access_level(player.UserId)
 
 	if user_access_level < command.access_level then
-		send_game_notification.send({
+		game_notification.send({
 			player = player,
 			title = "Error!",
 			text = player.Name .. ", you do not have access to this command!",
