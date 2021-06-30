@@ -1,5 +1,4 @@
 local commands_system = script.Parent.Parent
-local commands_system = script.Parent.Parent
 local scripts_folder = commands_system.scripts
 local misc_folder = commands_system.misc
 local settings_module = require(commands_system.settings)

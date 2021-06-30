@@ -1,5 +1,3 @@
--- FIX THIS ERROR FOR TEMP BAN!
-local commands_system = script.Parent.Parent
 local commands_system = script.Parent.Parent
 local scripts_folder = commands_system.scripts
 local misc_folder = commands_system.misc
@@ -59,6 +57,6 @@ return Command.new({
 				command_name = args.command_name,
 			}
 		)
-    	send_notification(args.player, find_player(args.command_arguments[1]), args.combined_command_arguments)
+    	send_notification(args.player, find_player(args.command_arguments[1]))
 	end,
 })

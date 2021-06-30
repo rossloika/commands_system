@@ -1,0 +1,13 @@
+{
+    "Lua.diagnostics.globals": [
+        "admin"
+    ],
+    "cSpell.words": [
+        "checkban",
+        "trelloban"
+    ],
+    "Lua.diagnostics.disable": [
+        "redefined-local",
+        "redundant-parameter"
+    ]
+}

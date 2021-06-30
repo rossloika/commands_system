@@ -1,6 +1,5 @@
 -- FIX THIS ERROR FOR TEMP BAN!
 local commands_system = script.Parent.Parent
-local commands_system = script.Parent.Parent
 local scripts_folder = commands_system.scripts
 local settings_module = require(commands_system.settings)
 local Command = require(scripts_folder.command)
