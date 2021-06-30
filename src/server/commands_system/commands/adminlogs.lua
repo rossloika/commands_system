@@ -1,16 +1,19 @@
+-- Local Roblox Services
+
+-- Local Paths
 local commands_system = script.Parent.Parent
-
 local scripts_folder = commands_system.scripts
-local misc_folder = commands_system.misc
 
+-- Local Requires
 local settings_module = require(commands_system.settings)
-local Command = require(scripts_folder.command)
+local command = require(scripts_folder.command)
 local temporary_ban = require(scripts_folder.temporary_ban)
 local send_game_notification = require(scripts_folder.send_notification)
 local send_webhook = require(scripts_folder.send_webhook)
 local create_ui = require(scripts_folder.create_ui)
 local admin_logs = require(scripts_folder.admin_logs)
 
+-- General Functions
 -- Find player via a string
 local function find_player(player)
 	for _, players in ipairs(game.Players:GetPlayers()) do
@@ -19,6 +22,8 @@ local function find_player(player)
 		end
 	end
 end
+
+-- Main Code
 
 local function send_notification(admin)
 	local webhook_data = {
@@ -54,7 +59,7 @@ local function display_admin_logs(admin)
 	end
 end
 
-return Command.new({
+return command.new({
 	name = "adminlogs",
 	access_level = settings_module.access_level.supervisor,
 	executor = function(args)

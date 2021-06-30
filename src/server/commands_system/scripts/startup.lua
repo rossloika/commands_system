@@ -9,7 +9,7 @@ local commands_folder = commands_system.commands
 local scripts_folder = commands_system.scripts
 local misc_folder = commands_system.misc
 
-local Command = require(scripts_folder.command)
+local command = require(scripts_folder.command)
 local Commander = require(scripts_folder.commander)
 local settings_module = require(commands_system.settings)
 local send_game_notification = require(scripts_folder.send_notification)
