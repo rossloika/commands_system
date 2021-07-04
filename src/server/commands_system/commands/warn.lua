@@ -31,7 +31,7 @@ local function warn_player(admin, player, reason)
 				table.insert(warningsList, index, warnings.Text)
 			end
 		end
-
+		local date = os.date("!*t")
 		local webhook_data = {
 			["username"] = player.Name .. " Kicked!",
 			["avatar_url"] = string.format("https://www.roblox.com/bust-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId),
